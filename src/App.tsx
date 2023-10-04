@@ -1,16 +1,20 @@
+import { useState } from "react";
 import "./styles/global.css";
+import TimerSelector from "./Components/TimerSelector";
 
 function App() {
+  const [selected, setSelected] = useState("pomodoro");
+
+  function onClickChangeSelected(event: React.MouseEvent<HTMLParagraphElement>) {
+    setSelected(event.currentTarget.innerHTML.toLowerCase());
+  }
+
   return (
     <main className="w-screen h-screen bg-blue flex flex-row justify-center items-start p-10">
       <div className="flex flex-col items-center gap-12">
         <h1 className="text-[32px] text-text">pomodoro</h1>
 
-        <div className="flex flex-row justify-center items-center bg-dark_blue p-2 rounded-full gap-12">
-          <p className="bg-accent_red rounded-full p-4 cursor-pointer text-sm select-none">pomodoro</p>
-          <p className="cursor-pointer text-sm text-dark_text p-4 select-none">short break</p>
-          <p className="cursor-pointer text-sm text-dark_text p-4 select-none">long break</p>
-        </div>
+        <TimerSelector onClickHandler={onClickChangeSelected} selected={selected} />
 
         <div className="clock cursor-pointer">
           <div className="clock_gradient_border bg-gradient-to-br from-darker_blue to-light_blue w-[25rem] h-[25rem] rounded-full relative flex flex-row justify-center items-center">
