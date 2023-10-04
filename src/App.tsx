@@ -1,9 +1,18 @@
 import { useState } from "react";
 import "./styles/global.css";
 import TimerSelector from "./Components/TimerSelector";
+import Modal from "./Components/Modal";
+import { ConfigProps } from "./types/pomodoro_config";
 
 function App() {
-  const [selected, setSelected] = useState("pomodoro");
+  const [selected, setSelected] = useState<string>("pomodoro");
+  const [config, setConfig] = useState<ConfigProps>({
+    pomodoro: 25,
+    short: 5,
+    long: 15,
+    font: "kumbh",
+    color: "",
+  });
 
   function onClickChangeSelected(event: React.MouseEvent<HTMLParagraphElement>) {
     setSelected(event.currentTarget.innerHTML.toLowerCase());
@@ -59,6 +68,9 @@ function App() {
           </g>
         </svg>
       </div>
+
+      {/* MODAL DE CONFIGURAÇÕES */}
+      <Modal config={config} />
     </main>
   );
 }
