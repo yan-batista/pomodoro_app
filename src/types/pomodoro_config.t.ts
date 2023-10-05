@@ -1,7 +1,7 @@
 export interface ConfigProps {
   pomodoro: number;
-  short: number;
-  long: number;
+  short_break: number;
+  long_break: number;
   font: string;
   color: string;
 }

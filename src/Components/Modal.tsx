@@ -11,7 +11,16 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
   const [newConfig, setNewConfig] = useState<ConfigProps>(config);
 
   function OnChangeInput(event: React.ChangeEvent<HTMLInputElement>, entryName: string) {
-    setNewConfig((prevConfig) => ({ ...prevConfig, [entryName]: parseInt(event.target.value) }));
+    if (event.target.value === "") {
+      event.target.value = "0";
+    }
+    let value = parseInt(event.target.value);
+    if (value > 60) value = 60;
+    if (value < 0) value = 0;
+
+    event.target.value = value.toString();
+
+    setNewConfig((prevConfig) => ({ ...prevConfig, [entryName]: value }));
   }
 
   function OnClickFont(event: React.MouseEvent<HTMLDivElement>) {
@@ -90,8 +99,8 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
                 type="number"
                 id="short_break-input"
                 name="short_break-input"
-                defaultValue={newConfig.short}
-                onChange={(e) => OnChangeInput(e, "short")}
+                defaultValue={newConfig.short_break}
+                onChange={(e) => OnChangeInput(e, "short_break")}
                 className="bg-input_color max-w-[140px] h-[40px] rounded-xl p-4 text-sm mt-2 outline-none"
               />
             </div>
@@ -102,8 +111,8 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
                 type="number"
                 id="long_break-input"
                 name="long_break-input"
-                defaultValue={newConfig.long}
-                onChange={(e) => OnChangeInput(e, "long")}
+                defaultValue={newConfig.long_break}
+                onChange={(e) => OnChangeInput(e, "long_break")}
                 className="bg-input_color max-w-[140px] h-[40px] rounded-xl p-4 text-sm mt-2 outline-none"
               />
             </div>
