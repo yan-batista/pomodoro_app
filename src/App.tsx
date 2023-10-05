@@ -11,11 +11,15 @@ function App() {
     short: 5,
     long: 15,
     font: "kumbh",
-    color: "",
+    color: "red",
   });
 
   function onClickChangeSelected(event: React.MouseEvent<HTMLParagraphElement>) {
     setSelected(event.currentTarget.innerHTML.toLowerCase());
+  }
+
+  function onClickChangeConfig(config: ConfigProps) {
+    setConfig(config);
   }
 
   return (
@@ -70,7 +74,7 @@ function App() {
       </div>
 
       {/* MODAL DE CONFIGURAÇÕES */}
-      <Modal config={config} />
+      <Modal config={config} onClickChangeConfig={onClickChangeConfig} />
     </main>
   );
 }

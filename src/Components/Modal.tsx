@@ -4,17 +4,11 @@ import Circle from "./Circle";
 
 interface ModalProps {
   config: ConfigProps;
+  onClickChangeConfig: (config: ConfigProps) => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
+const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps) => {
   const [newConfig, setNewConfig] = useState<ConfigProps>(config);
-
-  function CheckCircleColor(font: string) {
-    return newConfig.font === font ? "blue" : "input_color";
-  }
-  function CheckCircleTextColor(font: string) {
-    return newConfig.font === font ? "text-white" : "text-blue";
-  }
 
   function OnChangeInput(event: React.ChangeEvent<HTMLInputElement>, entryName: string) {
     setNewConfig((prevConfig) => ({ ...prevConfig, [entryName]: parseInt(event.target.value) }));
@@ -27,8 +21,20 @@ const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
       setNewConfig((prevConfig) => ({ ...prevConfig, font: newFont!.value }));
     }
   }
+  function CheckCircleColor(font: string) {
+    return newConfig.font === font ? "blue" : "input_color";
+  }
+  function CheckCircleTextColor(font: string) {
+    return newConfig.font === font ? "text-white" : "text-blue";
+  }
 
-  console.log(newConfig);
+  function OnClickColor(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
+    let newColor = event.currentTarget.querySelector("input");
+    if (newColor) {
+      setNewConfig((prevConfig) => ({ ...prevConfig, color: newColor!.value }));
+    }
+  }
 
   return (
     /* Modal Wrapper */
@@ -95,17 +101,32 @@ const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
         <div className="flex flex-row justify-between items-center mx-9 py-6 border-b border-zinc-200">
           <p className="text-sm uppercase tracking-[5px]">Font</p>
           <div className="flex flex-row justify-start items-center gap-4">
-            <Circle color={CheckCircleColor("kumbh")} className="hover:bg-blue hover:text-white" onClick={OnClickFont}>
+            <Circle
+              color={CheckCircleColor("kumbh")}
+              name="font"
+              value="kumbh"
+              className="hover:bg-blue hover:text-white"
+              onClick={OnClickFont}
+            >
               <p className={`${CheckCircleTextColor("kumbh")} group-hover:text-white font-kumbh`}>Aa</p>
-              <input type="radio" name="font" value="kumbh" className="hidden" defaultChecked={true} />
             </Circle>
-            <Circle color={CheckCircleColor("roboto_slab")} className={`hover:bg-blue `} onClick={OnClickFont}>
+            <Circle
+              color={CheckCircleColor("roboto_slab")}
+              name="font"
+              value="roboto_slab"
+              className={`hover:bg-blue `}
+              onClick={OnClickFont}
+            >
               <p className={`${CheckCircleTextColor("roboto_slab")} group-hover:text-white font-roboto_slab`}>Aa</p>
-              <input type="radio" name="font" value="roboto_slab" className="hidden" defaultChecked={true} />
             </Circle>
-            <Circle color={CheckCircleColor("space_mono")} className="hover:bg-blue" onClick={OnClickFont}>
+            <Circle
+              color={CheckCircleColor("space_mono")}
+              name="font"
+              value="space_mono"
+              className="hover:bg-blue"
+              onClick={OnClickFont}
+            >
               <p className={`${CheckCircleTextColor("space_mono")} group-hover:text-white font-space_mono`}>Aa</p>
-              <input type="radio" name="font" value="space_mono" className="hidden" defaultChecked={true} />
             </Circle>
           </div>
         </div>
@@ -113,7 +134,7 @@ const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
         <div className="flex flex-row justify-between items-center mx-9 py-6">
           <p className="text-sm uppercase tracking-[5px]">Color</p>
           <div className="flex flex-row justify-start items-center gap-4">
-            <Circle color="accent_red">
+            <Circle color="accent_red" onClick={OnClickColor} name="color" value="red">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -124,13 +145,13 @@ const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className=""
+                className={`${newConfig.color === "red" ? "" : "hidden"} group-hover:block`}
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </Circle>
 
-            <Circle color="accent_cyan">
+            <Circle color="accent_cyan" onClick={OnClickColor} name="color" value="cyan">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -141,13 +162,13 @@ const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="hidden group-hover:block"
+                className={`${newConfig.color === "cyan" ? "" : "hidden"} group-hover:block`}
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </Circle>
 
-            <Circle color="accent_purple">
+            <Circle color="accent_purple" onClick={OnClickColor} name="color" value="purple">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -158,14 +179,17 @@ const Modal: React.FC<ModalProps> = ({ config }: ModalProps) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="hidden group-hover:block"
+                className={`${newConfig.color === "purple" ? "" : "hidden"} group-hover:block`}
               >
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </Circle>
           </div>
         </div>
-        <button className="text-white bg-accent_red rounded-full px-12 py-4 absolute -bottom-7 left-[50%] -translate-x-[50%] hover:scale-110 duration-200">
+        <button
+          className="text-white bg-accent_red rounded-full px-12 py-4 absolute -bottom-7 left-[50%] -translate-x-[50%] hover:scale-110 duration-200"
+          onClick={() => onClickChangeConfig(newConfig)}
+        >
           Apply
         </button>
       </div>
