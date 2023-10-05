@@ -15,7 +15,7 @@ const Circle = ({ children, color, className = "", name, value, ...props }: Circ
       {...props}
     >
       {children}
-      <input type="radio" name={name} value={value} className="hidden" />
+      <input type="radio" id={`${name}_${value}`} name={name} value={value} className="hidden" />
     </div>
   );
 };

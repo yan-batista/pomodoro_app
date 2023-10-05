@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles/global.css";
+
 import TimerSelector from "./Components/TimerSelector";
 import Modal from "./Components/Modal";
-import { ConfigProps } from "./types/pomodoro_config";
+import { ConfigProps } from "./types/pomodoro_config.t";
 
 function App() {
   const [selected, setSelected] = useState<string>("pomodoro");
@@ -13,6 +14,54 @@ function App() {
     font: "kumbh",
     color: "red",
   });
+  //const [partyTime, setPartyTime] = useState(false);
+  const [isTimerPaused, setIsTimerPaused] = useState(true);
+  const [minutes, setMinutes] = useState(config.pomodoro.toString());
+  const [seconds, setSeconds] = useState("00");
+  const [target, setTarget] = useState<Date | null>(null);
+
+  useEffect(() => {
+    if (!isTimerPaused && target === null) {
+      const today = new Date();
+      today.setMinutes(today.getMinutes() + config.pomodoro);
+      setTarget(today);
+    }
+
+    const timer = () => {
+      if (!isTimerPaused && target !== null) {
+        const now = new Date();
+        const difference = target.getTime() - now.getTime();
+
+        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        setMinutes(m.toString().padStart(2, "0"));
+
+        const s = Math.floor((difference % (1000 * 60)) / 1000);
+        setSeconds(s.toString().padStart(2, "0"));
+
+        /* if (m <= 0 && s <= 0) {
+          setPartyTime(true);
+        } */
+      }
+    };
+
+    timer();
+
+    const interval = setInterval(timer, 1000);
+
+    return () => clearInterval(interval);
+  }, [isTimerPaused, target]);
+
+  function StartOrPauseTimer() {
+    if (isTimerPaused) {
+      const remainingTimeInSeconds = parseInt(minutes) * 60 + parseInt(seconds);
+      const today = new Date();
+      today.setSeconds(today.getSeconds() + remainingTimeInSeconds);
+      setTarget(today);
+      setIsTimerPaused(false);
+    } else {
+      setIsTimerPaused(true);
+    }
+  }
 
   function onClickChangeSelected(event: React.MouseEvent<HTMLParagraphElement>) {
     setSelected(event.currentTarget.innerHTML.toLowerCase());
@@ -22,17 +71,37 @@ function App() {
     setConfig(config);
   }
 
+  function OpenModal() {
+    let modal = document.querySelector("#config_modal");
+    if (modal) {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+  }
+
+  const timerAction = (): string => {
+    if (target === null) {
+      return "start";
+    } else if (isTimerPaused) {
+      return "resume";
+    } else {
+      return "pause";
+    }
+  };
+
   return (
-    <main className="w-screen h-screen bg-blue flex flex-row justify-center items-start p-10">
+    <main className={`w-screen h-screen bg-blue flex flex-row justify-center items-start p-10 font-${config.font}`}>
       <div className="flex flex-col items-center gap-12">
         <h1 className="text-[32px] text-text">pomodoro</h1>
 
-        <TimerSelector onClickHandler={onClickChangeSelected} selected={selected} />
+        <TimerSelector onClickHandler={onClickChangeSelected} selected={selected} color={config.color} />
 
-        <div className="clock cursor-pointer">
-          <div className="clock_gradient_border bg-gradient-to-br from-darker_blue to-light_blue w-[25rem] h-[25rem] rounded-full relative flex flex-row justify-center items-center">
-            <div className="clock_container w-[22rem] h-[22rem] bg-dark_blue rounded-full flex flex-row justify-center items-center">
-              <div className="clock_timer_bar border-[12px] border-accent_red rounded-full w-[21rem] h-[21rem] flex flex-col justify-center items-center">
+        <div className="clock cursor-pointer" onClick={StartOrPauseTimer}>
+          <div className="clock_gradient_border bg-gradient-to-br from-darker_blue to-light_blue w-[27rem] h-[27rem] rounded-full relative flex flex-row justify-center items-center">
+            <div className="clock_container w-[25rem] h-[25rem] bg-dark_blue rounded-full flex flex-row justify-center items-center">
+              <div
+                className={`clock_timer_bar border-[12px] border-accent_${config.color} rounded-full w-[25rem] h-[25rem] flex flex-col justify-center items-center`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -47,8 +116,8 @@ function App() {
                     d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
                   ></path>
                 </svg>
-                <h1 className="text-8xl text-text font-normal my-8 select-none">25:00</h1>
-                <p className="uppercase text-text font-normal tracking-[15px] select-none">start</p>
+                <h1 className="text-8xl text-text font-normal my-8 select-none">{`${minutes}:${seconds}`}</h1>
+                <p className="uppercase text-text font-normal tracking-[15px] select-none">{timerAction()}</p>
               </div>
             </div>
           </div>
@@ -61,6 +130,7 @@ function App() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="cursor-pointer"
+          onClick={OpenModal}
         >
           <g opacity="0.5">
             <path

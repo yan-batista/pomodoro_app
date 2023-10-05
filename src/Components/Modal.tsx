@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ConfigProps } from "../types/pomodoro_config";
+import { ConfigProps } from "../types/pomodoro_config.t";
 import Circle from "./Circle";
 
 interface ModalProps {
@@ -36,9 +36,14 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
     }
   }
 
+  function CloseModal() {
+    let modal = document.querySelector("#config_modal");
+    if (modal) modal.classList.add("hidden");
+  }
+
   return (
     /* Modal Wrapper */
-    <div className="w-screen h-screen flex flex-row justify-center items-center absolute top-0">
+    <div className="w-screen h-screen hidden flex-row justify-center items-center absolute top-0" id="config_modal">
       {/* Overlay */}
       <div className="w-full h-full bg-black opacity-40 absolute top-0"></div>
       {/* Modal Container */}
@@ -57,6 +62,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
             strokeLinecap="round"
             strokeLinejoin="round"
             className="cursor-pointer text-dark_text"
+            onClick={CloseModal}
           >
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
@@ -70,6 +76,8 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               <p className="text-light_text">pomodoro</p>
               <input
                 type="number"
+                id="pomodoro-input"
+                name="pomodoro-input"
                 defaultValue={newConfig.pomodoro}
                 onChange={(e) => OnChangeInput(e, "pomodoro")}
                 className="bg-input_color max-w-[140px] h-[40px] rounded-xl p-4 text-sm mt-2 outline-none"
@@ -80,6 +88,8 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               <p className="text-light_text">short break</p>
               <input
                 type="number"
+                id="short_break-input"
+                name="short_break-input"
                 defaultValue={newConfig.short}
                 onChange={(e) => OnChangeInput(e, "short")}
                 className="bg-input_color max-w-[140px] h-[40px] rounded-xl p-4 text-sm mt-2 outline-none"
@@ -90,6 +100,8 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               <p className="text-light_text">long break</p>
               <input
                 type="number"
+                id="long_break-input"
+                name="long_break-input"
                 defaultValue={newConfig.long}
                 onChange={(e) => OnChangeInput(e, "long")}
                 className="bg-input_color max-w-[140px] h-[40px] rounded-xl p-4 text-sm mt-2 outline-none"
@@ -187,8 +199,11 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
           </div>
         </div>
         <button
-          className="text-white bg-accent_red rounded-full px-12 py-4 absolute -bottom-7 left-[50%] -translate-x-[50%] hover:scale-110 duration-200"
-          onClick={() => onClickChangeConfig(newConfig)}
+          className={`text-white bg-accent_${newConfig.color} rounded-full px-12 py-4 absolute -bottom-7 left-[50%] -translate-x-[50%] hover:scale-110 duration-200`}
+          onClick={() => {
+            onClickChangeConfig(newConfig);
+            CloseModal();
+          }}
         >
           Apply
         </button>
