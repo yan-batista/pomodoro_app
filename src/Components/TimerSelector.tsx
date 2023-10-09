@@ -6,9 +6,9 @@ interface Props {
 
 const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Props) => {
   return (
-    <div className="flex flex-row justify-center items-center bg-dark_blue p-2 rounded-full gap-12 relative z-15">
+    <div className="flex flex-row justify-around items-center bg-dark_blue p-2 rounded-full sm:gap-12 relative w-fit">
       <p
-        className={`cursor-pointer text-sm p-4 select-none ${
+        className={`cursor-pointer text-[12px] sm:text-sm p-4 select-none ${
           selected === "pomodoro" ? `bg-accent_${color} rounded-full text-blue` : "text-dark_text"
         }`}
         onClick={onClickHandler}
@@ -16,7 +16,7 @@ const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Pro
         pomodoro
       </p>
       <p
-        className={`cursor-pointer text-sm p-4 select-none ${
+        className={`cursor-pointer text-[12px] sm:text-sm p-4 select-none whitespace-nowrap ${
           selected === "short_break" ? `bg-accent_${color} rounded-full text-blue` : "text-dark_text"
         }`}
         onClick={onClickHandler}
@@ -24,7 +24,7 @@ const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Pro
         short break
       </p>
       <p
-        className={`cursor-pointer text-sm p-4 select-none ${
+        className={`cursor-pointer text-[12px] sm:text-sm p-4 select-none whitespace-nowrap ${
           selected === "long_break" ? `bg-accent_${color} rounded-full text-blue` : "text-dark_text"
         }`}
         onClick={onClickHandler}

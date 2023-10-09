@@ -56,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
       {/* Overlay */}
       <div className="w-full h-full bg-black opacity-40 absolute top-0"></div>
       {/* Modal Container */}
-      <div className="bg-white w-[530px] h-[500px] absolute top-[17%] rounded-3xl border z-20">
+      <div className="bg-white w-full h-[650px] sm:w-[530px] sm:h-[500px] absolute top-[5%] sm:top-[17%] rounded-3xl border z-20">
         {/* Modal Header (Settings) */}
         <div className="border-b border-zinc-200 flex flex-row justify-between items-center px-8 py-6">
           <p className="text-[28px] text-blue">Settings</p>
@@ -79,9 +79,9 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
         </div>
         {/* Time */}
         <div className="modal-time mx-9 py-6 border-b border-zinc-200">
-          <p className="uppercase text-blue tracking-[5px] text-sm">Time (Minutes)</p>
-          <div className="selection-row flex flex-row justify-between items-center">
-            <div className="selection text-xs font-bold mt-4">
+          <p className="uppercase text-blue tracking-[5px] text-sm text-center sm:text-start">Time (Minutes)</p>
+          <div className="selection-row flex flex-col sm:flex-row items-start sm:items-center">
+            <div className="selection text-xs font-bold mt-4 w-full flex flex-row justify-between items-center sm:items-start sm:flex-col">
               <p className="text-light_text">pomodoro</p>
               <input
                 type="number"
@@ -93,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               />
             </div>
 
-            <div className="selection text-xs font-bold mt-4">
+            <div className="selection text-xs font-bold mt-1 sm:mt-4 w-full flex flex-row justify-between items-center sm:items-start sm:flex-col">
               <p className="text-light_text">short break</p>
               <input
                 type="number"
@@ -105,7 +105,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               />
             </div>
 
-            <div className="selection text-xs font-bold mt-4">
+            <div className="selection text-xs font-bold mt-1 sm:mt-4 w-full flex flex-row justify-between items-center sm:items-start sm:flex-col">
               <p className="text-light_text">long break</p>
               <input
                 type="number"
@@ -119,9 +119,9 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
           </div>
         </div>
         {/* Font */}
-        <div className="flex flex-row justify-between items-center mx-9 py-6 border-b border-zinc-200">
+        <div className="flex flex-col sm:flex-row justify-between items-center mx-9 py-6 border-b border-zinc-200">
           <p className="text-sm uppercase tracking-[5px]">Font</p>
-          <div className="flex flex-row justify-start items-center gap-4">
+          <div className="flex flex-row justify-start items-center gap-4 mt-4 sm:mt-0">
             <Circle
               color={CheckCircleColor("kumbh")}
               name="font"
@@ -152,9 +152,9 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
           </div>
         </div>
         {/* Color */}
-        <div className="flex flex-row justify-between items-center mx-9 py-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mx-9 py-6">
           <p className="text-sm uppercase tracking-[5px]">Color</p>
-          <div className="flex flex-row justify-start items-center gap-4">
+          <div className="flex flex-row justify-start items-center gap-4 mt-4">
             <Circle color="accent_red" onClick={OnClickColor} name="color" value="red">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

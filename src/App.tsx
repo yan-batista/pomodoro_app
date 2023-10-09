@@ -33,9 +33,9 @@ function App() {
   }
 
   return (
-    <main className={`w-screen h-screen  flex flex-row justify-center items-start p-10 font-${config.font}`}>
-      <div className="flex flex-col items-center gap-12">
-        <h1 className="text-[32px] text-text select-none">pomodoro</h1>
+    <div className={`w-screen h-screen flex flex-row justify-center items-start py-10 font-${config.font}`}>
+      <div className="flex flex-col items-center gap-12 w-full px-4">
+        <h1 className="text-[24px] sm:text-[32px] text-text select-none">pomodoro</h1>
 
         <TimerSelector onClickHandler={onClickChangeSelected} selected={selected} color={config.color} />
 
@@ -63,7 +63,7 @@ function App() {
 
       {/* MODAL DE CONFIGURAÇÕES */}
       <Modal config={config} onClickChangeConfig={onClickChangeConfig} />
-    </main>
+    </div>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { ConfigProps } from "../types/pomodoro_config.t";
 import LoadingBar from "./Loading";
 
@@ -18,6 +19,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
   const [target, setTarget] = useState<Date | null>(null);
 
   const [percentagePassed, setPercentagePassed] = useState(0);
+  const isMinSmallScreen = useMediaQuery({ minWidth: 640 });
 
   useEffect(() => {
     resetTimer(config[selected as keyof NumericConfigProps].toString());
@@ -99,11 +101,17 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
   return (
     <div className="clock cursor-pointer relative z-0">
       <div
-        className="shadow-[-50px_-50px_150px_-80px_rgba(109,124,255,0.4)] clock_gradient_border bg-gradient-to-br from-darker_blue to-light_blue w-[28rem] h-[28rem] rounded-full relative flex flex-row justify-center items-center"
+        className="shadow-[-50px_-50px_150px_-80px_rgba(109,124,255,0.4)] clock_gradient_border bg-gradient-to-br from-darker_blue to-light_blue w-[18rem] h-[18rem] sm:w-[24rem] sm:h-[24rem] rounded-full relative flex flex-row justify-center items-center"
         onClick={startOrPauseTimer}
       >
-        <div className="clock_container w-[25rem] h-[25rem] bg-dark_blue rounded-full flex flex-row justify-center items-center">
-          <LoadingBar percentage={percentagePassed} circleWidth={400} color={config.color} />
+        <div className="clock_container w-[16rem] h-[16rem] sm:w-[22rem] sm:h-[22rem] bg-dark_blue rounded-full flex flex-row justify-center items-center">
+          <LoadingBar
+            percentage={percentagePassed}
+            circleWidth={isMinSmallScreen ? 400 : 250}
+            radius={isMinSmallScreen ? 165 : 115}
+            color={config.color}
+            strokeWidth={isMinSmallScreen ? "15px" : "10px"}
+          />
 
           <div className="flex flex-col justify-center items-center">
             <div onClick={MuteOrUnmuteTimer}>
@@ -146,9 +154,13 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
                 </svg>
               )}
             </div>
-            {isTimeOver && <h1 className="text-4xl text-text font-normal my-8 select-none">{displayMessage()}</h1>}
+            {/**text-4xl */}
+            {/*NUMEROS DO RELÓGIO: text-8xl */}
+            {isTimeOver && (
+              <h1 className="text-4xl text-text font-normal my-6 sm:my-8 select-none">{displayMessage()}</h1>
+            )}
             {!isTimeOver && (
-              <h1 className="text-8xl text-text font-normal my-8 select-none">{`${minutes}:${seconds}`}</h1>
+              <h1 className="text-6xl sm:text-8xl text-text font-normal my-6 sm:my-8 select-none">{`${minutes}:${seconds}`}</h1>
             )}
             <p className="uppercase text-text font-normal tracking-[15px] select-none">
               {!isTimeOver && timerAction()}
