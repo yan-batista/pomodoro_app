@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { ConfigProps } from "../types/pomodoro_config.t";
+import LoadingBar from "./Loading";
 
 interface TimerProps {
   config: ConfigProps;
   selected: string;
 }
+
+type NumericConfigProps = Pick<ConfigProps, "pomodoro" | "short_break" | "long_break">;
 
 const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
   const [isMuted, setIsMuted] = useState(false);
@@ -14,21 +17,22 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
   const [seconds, setSeconds] = useState("00");
   const [target, setTarget] = useState<Date | null>(null);
 
+  const [percentagePassed, setPercentagePassed] = useState(0);
+
   useEffect(() => {
-    resetTimer(config[selected as keyof typeof config].toString());
+    resetTimer(config[selected as keyof NumericConfigProps].toString());
   }, [config, selected]);
 
   useEffect(() => {
-    if (!isTimerPaused && target === null) {
-      const today = new Date();
-      today.setMinutes(today.getMinutes() + config.pomodoro);
-      setTarget(today);
-    }
-
     const timer = () => {
       if (!isTimerPaused && target !== null) {
         const now = new Date();
         const difference = target.getTime() - now.getTime();
+
+        const totalDuration = config[selected as keyof NumericConfigProps] * 60 * 1000;
+        const passedTime = totalDuration - difference;
+        let percentage = (passedTime / totalDuration) * 100;
+        setPercentagePassed(Math.min(percentage, 100));
 
         const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         setMinutes(m.toString().padStart(2, "0"));
@@ -48,6 +52,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
 
     return () => clearInterval(interval);
   }, [isTimerPaused, target]);
+
   function startOrPauseTimer() {
     if (isTimerPaused) {
       const remainingTimeInSeconds = parseInt(minutes) * 60 + parseInt(seconds);
@@ -66,6 +71,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
     setMinutes(minutes);
     setSeconds("00");
     setTarget(null);
+    setPercentagePassed(0);
   }
 
   function MuteOrUnmuteTimer() {
@@ -97,9 +103,9 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
         onClick={startOrPauseTimer}
       >
         <div className="clock_container w-[25rem] h-[25rem] bg-dark_blue rounded-full flex flex-row justify-center items-center">
-          <div
-            className={`clock_timer_bar border-[12px] border-accent_${config.color} rounded-full w-[24rem] h-[24rem] flex flex-col justify-center items-center`}
-          >
+          <LoadingBar percentage={percentagePassed} circleWidth={400} color={config.color} />
+
+          <div className="flex flex-col justify-center items-center">
             <div onClick={MuteOrUnmuteTimer}>
               {isMuted ? (
                 <svg
@@ -140,9 +146,6 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
                 </svg>
               )}
             </div>
-            {/* <h1 className="text-8xl text-text font-normal my-8 select-none">
-              {isTimeOver ? displayMessage() : `${minutes}:${seconds}`}
-            </h1> */}
             {isTimeOver && <h1 className="text-4xl text-text font-normal my-8 select-none">{displayMessage()}</h1>}
             {!isTimeOver && (
               <h1 className="text-8xl text-text font-normal my-8 select-none">{`${minutes}:${seconds}`}</h1>
