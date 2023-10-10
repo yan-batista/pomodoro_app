@@ -1,12 +1,14 @@
 import { useState } from "react";
 import "./styles/global.css";
 
+import { ConfigProps } from "./types/pomodoro_config.t";
 import TimerSelector from "./Components/TimerSelector";
 import Modal from "./Components/Modal";
-import { ConfigProps } from "./types/pomodoro_config.t";
 import Timer from "./Components/Timer";
+import slideAudio from "./assets/slide.mp3";
 
 function App() {
+  const [isMuted, setIsMuted] = useState(false);
   const [selected, setSelected] = useState<string>("pomodoro");
   const [config, setConfig] = useState<ConfigProps>({
     pomodoro: 25,
@@ -15,9 +17,11 @@ function App() {
     font: "kumbh",
     color: "red",
   });
+  const slideSound = new Audio(slideAudio);
 
   function onClickChangeSelected(event: React.MouseEvent<HTMLParagraphElement>) {
     setSelected(event.currentTarget.innerHTML.toLowerCase().replace(" ", "_"));
+    if (!isMuted) slideSound.play();
   }
 
   function onClickChangeConfig(config: ConfigProps) {
@@ -32,6 +36,11 @@ function App() {
     }
   }
 
+  function MuteOrUnmuteTimer(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
+    setIsMuted((prevState) => !prevState);
+  }
+
   return (
     <div className={`w-screen h-screen flex flex-row justify-center items-start py-10 font-${config.font}`}>
       <div className="flex flex-col items-center gap-12 w-full px-4">
@@ -39,7 +48,7 @@ function App() {
 
         <TimerSelector onClickHandler={onClickChangeSelected} selected={selected} color={config.color} />
 
-        <Timer selected={selected} config={config} />
+        <Timer selected={selected} config={config} isMuted={isMuted} MuteOrUnmuteTimer={MuteOrUnmuteTimer} />
 
         <svg
           width="28"

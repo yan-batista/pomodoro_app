@@ -2,24 +2,31 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { ConfigProps } from "../types/pomodoro_config.t";
 import LoadingBar from "./Loading";
+import startTimerAudio from "../assets/startTimer.mp3";
+import pauseTimerAudio from "../assets/pauseTimer.mp3";
+import timesUpAudio from "../assets/timesUp.mp3";
 
 interface TimerProps {
   config: ConfigProps;
   selected: string;
+  isMuted: boolean;
+  MuteOrUnmuteTimer: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 type NumericConfigProps = Pick<ConfigProps, "pomodoro" | "short_break" | "long_break">;
 
-const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
-  const [isMuted, setIsMuted] = useState(false);
+const Timer: React.FC<TimerProps> = ({ config, selected, isMuted, MuteOrUnmuteTimer }: TimerProps) => {
   const [isTimeOver, setIsTimeOver] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(true);
   const [minutes, setMinutes] = useState(config.pomodoro.toString());
   const [seconds, setSeconds] = useState("00");
   const [target, setTarget] = useState<Date | null>(null);
-
   const [percentagePassed, setPercentagePassed] = useState(0);
   const isMinSmallScreen = useMediaQuery({ minWidth: 640 });
+
+  const startTimerSound = new Audio(startTimerAudio);
+  const pauseTimerSound = new Audio(pauseTimerAudio);
+  const timesUpSound = new Audio(timesUpAudio);
 
   useEffect(() => {
     resetTimer(config[selected as keyof NumericConfigProps].toString());
@@ -44,6 +51,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
 
         if (m <= 0 && s <= 0) {
           setIsTimeOver(true);
+          timesUpSound.play();
         }
       }
     };
@@ -62,8 +70,10 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
       today.setSeconds(today.getSeconds() + remainingTimeInSeconds);
       setTarget(today);
       setIsTimerPaused(false);
+      if (!isMuted) startTimerSound.play();
     } else {
       setIsTimerPaused(true);
+      if (!isMuted) pauseTimerSound.play();
     }
   }
 
@@ -74,11 +84,6 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
     setSeconds("00");
     setTarget(null);
     setPercentagePassed(0);
-  }
-
-  function MuteOrUnmuteTimer(event: React.MouseEvent<HTMLDivElement>) {
-    event.stopPropagation();
-    setIsMuted((prevState) => !prevState);
   }
 
   const timerAction = (): string => {
