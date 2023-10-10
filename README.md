@@ -47,7 +47,7 @@ Users should be able to:
 
 ### What I learned
 
-Tailwindcss doesn't work well with dynamic class names. Since in this application elements can change from 3 differente colors (red, cyan and purple) based on user choice, I was using dynamic classes to create the effect.
+Tailwindcss doesn't work well with dynamic class names. Since in this application elements can change from 3 different colors (red, cyan and purple) based on user choice, I was using dynamic classes to create the effect.
 
 ```html
 <div className="{`bg-accent_${color}" ...`}></div>
