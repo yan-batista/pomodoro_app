@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { ConfigProps } from "../types/pomodoro_config.t";
 import Circle from "./Circle";
-import colorVariants from "../constants";
 
 interface ModalProps {
   config: ConfigProps;
   onClickChangeConfig: (config: ConfigProps) => void;
 }
+
+const colorVariants = {
+  red: "bg-accent_red",
+  cyan: "bg-accent_cyan",
+  purple: "bg-accent_purple",
+  blue: "bg-blue",
+  input_color: "bg-input_color",
+};
 
 const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps) => {
   const [newConfig, setNewConfig] = useState<ConfigProps>(config);

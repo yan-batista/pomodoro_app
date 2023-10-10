@@ -1,10 +1,16 @@
-import colorVariants from "../constants";
-
 interface Props {
   onClickHandler: (event: React.MouseEvent<HTMLParagraphElement>) => void;
   selected: string;
   color: string;
 }
+
+const colorVariants = {
+  red: "bg-accent_red",
+  cyan: "bg-accent_cyan",
+  purple: "bg-accent_purple",
+  blue: "bg-blue",
+  input_color: "bg-input_color",
+};
 
 const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Props) => {
   return (
