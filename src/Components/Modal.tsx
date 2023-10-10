@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ConfigProps } from "../types/pomodoro_config.t";
 import Circle from "./Circle";
+import colorVariants from "../constants";
 
 interface ModalProps {
   config: ConfigProps;
@@ -155,7 +156,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
         <div className="flex flex-col sm:flex-row justify-between items-center mx-9 py-6">
           <p className="text-sm uppercase tracking-[5px]">Color</p>
           <div className="flex flex-row justify-start items-center gap-4 mt-4">
-            <Circle color="accent_red" onClick={OnClickColor} name="color" value="red">
+            <Circle color="red" onClick={OnClickColor} name="color" value="red">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -172,7 +173,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               </svg>
             </Circle>
 
-            <Circle color="accent_cyan" onClick={OnClickColor} name="color" value="cyan">
+            <Circle color="cyan" onClick={OnClickColor} name="color" value="cyan">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -189,7 +190,7 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
               </svg>
             </Circle>
 
-            <Circle color="accent_purple" onClick={OnClickColor} name="color" value="purple">
+            <Circle color="purple" onClick={OnClickColor} name="color" value="purple">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -208,7 +209,9 @@ const Modal: React.FC<ModalProps> = ({ config, onClickChangeConfig }: ModalProps
           </div>
         </div>
         <button
-          className={`text-white bg-accent_${newConfig.color} rounded-full px-12 py-4 absolute -bottom-7 left-[50%] -translate-x-[50%] hover:scale-110 duration-200`}
+          className={`${
+            colorVariants[newConfig.color as keyof typeof colorVariants]
+          } text-white rounded-full px-12 py-4 absolute -bottom-7 left-[50%] -translate-x-[50%] hover:scale-110 duration-200`}
           onClick={() => {
             onClickChangeConfig(newConfig);
             CloseModal();

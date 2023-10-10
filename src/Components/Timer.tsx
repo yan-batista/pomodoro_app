@@ -76,7 +76,8 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
     setPercentagePassed(0);
   }
 
-  function MuteOrUnmuteTimer() {
+  function MuteOrUnmuteTimer(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
     setIsMuted((prevState) => !prevState);
   }
 
@@ -114,7 +115,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
           />
 
           <div className="flex flex-col justify-center items-center">
-            <div onClick={MuteOrUnmuteTimer}>
+            <div onClick={MuteOrUnmuteTimer} className="z-10">
               {isMuted ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -154,8 +155,6 @@ const Timer: React.FC<TimerProps> = ({ config, selected }: TimerProps) => {
                 </svg>
               )}
             </div>
-            {/**text-4xl */}
-            {/*NUMEROS DO RELÓGIO: text-8xl */}
             {isTimeOver && (
               <h1 className="text-4xl text-text font-normal my-6 sm:my-8 select-none">{displayMessage()}</h1>
             )}

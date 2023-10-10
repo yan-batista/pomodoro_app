@@ -1,3 +1,5 @@
+import colorVariants from "../constants";
+
 interface Props {
   onClickHandler: (event: React.MouseEvent<HTMLParagraphElement>) => void;
   selected: string;
@@ -9,7 +11,9 @@ const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Pro
     <div className="flex flex-row justify-around items-center bg-dark_blue p-2 rounded-full sm:gap-12 relative w-fit">
       <p
         className={`cursor-pointer text-[12px] sm:text-sm p-4 select-none ${
-          selected === "pomodoro" ? `bg-accent_${color} rounded-full text-blue` : "text-dark_text"
+          selected === "pomodoro"
+            ? `${colorVariants[color as keyof typeof colorVariants]} rounded-full text-blue`
+            : "text-dark_text"
         }`}
         onClick={onClickHandler}
       >
@@ -17,7 +21,9 @@ const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Pro
       </p>
       <p
         className={`cursor-pointer text-[12px] sm:text-sm p-4 select-none whitespace-nowrap ${
-          selected === "short_break" ? `bg-accent_${color} rounded-full text-blue` : "text-dark_text"
+          selected === "short_break"
+            ? `${colorVariants[color as keyof typeof colorVariants]} rounded-full text-blue`
+            : "text-dark_text"
         }`}
         onClick={onClickHandler}
       >
@@ -25,7 +31,9 @@ const TimerSelector: React.FC<Props> = ({ onClickHandler, selected, color }: Pro
       </p>
       <p
         className={`cursor-pointer text-[12px] sm:text-sm p-4 select-none whitespace-nowrap ${
-          selected === "long_break" ? `bg-accent_${color} rounded-full text-blue` : "text-dark_text"
+          selected === "long_break"
+            ? `${colorVariants[color as keyof typeof colorVariants]} rounded-full text-blue`
+            : "text-dark_text"
         }`}
         onClick={onClickHandler}
       >

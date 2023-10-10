@@ -15,6 +15,11 @@ const LoadingBar: React.FC<LoadingBarProps> = ({
 }: LoadingBarProps) => {
   const dashArray = radius * Math.PI * 2;
   const dashOffset = (dashArray * percentage) / 100;
+  const strokeColorVariants = {
+    red: "stroke-accent_red",
+    cyan: "stroke-accent_cyan",
+    purple: "stroke-accent_purple",
+  };
 
   return (
     <div className="absolute">
@@ -24,7 +29,7 @@ const LoadingBar: React.FC<LoadingBarProps> = ({
           cy={circleWidth / 2}
           strokeWidth={strokeWidth}
           r={radius}
-          className={`fill-none stroke-accent_${color}`}
+          className={`fill-none ${strokeColorVariants[color as keyof typeof strokeColorVariants]}`}
           style={{
             strokeLinecap: "round",
             strokeLinejoin: "round",
