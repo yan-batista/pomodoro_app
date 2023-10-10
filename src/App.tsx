@@ -56,7 +56,7 @@ function App() {
           viewBox="0 0 28 28"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="cursor-pointer"
+          className="cursor-pointer hover:scale-150 hover:rotate-45 duration-150"
           onClick={OpenModal}
         >
           <g opacity="0.5">

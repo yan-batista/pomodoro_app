@@ -51,7 +51,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected, isMuted, MuteOrUnmuteTi
 
         if (m <= 0 && s <= 0) {
           setIsTimeOver(true);
-          timesUpSound.play();
+          if (!isMuted) timesUpSound.play();
         }
       }
     };
@@ -161,7 +161,7 @@ const Timer: React.FC<TimerProps> = ({ config, selected, isMuted, MuteOrUnmuteTi
               )}
             </div>
             {isTimeOver && (
-              <h1 className="text-4xl text-text font-normal my-6 sm:my-8 select-none">{displayMessage()}</h1>
+              <h1 className="text-2xl text-text font-normal my-6 sm:my-8 select-none">{displayMessage()}</h1>
             )}
             {!isTimeOver && (
               <h1 className="text-6xl sm:text-8xl text-text font-normal my-6 sm:my-8 select-none">{`${minutes}:${seconds}`}</h1>
